@@ -1,20 +1,20 @@
 ## Based Image
-FROM jenkins/jenkins:2.266
+FROM jenkins/jenkins:lts
 
 ## Define Environment
 LABEL maintainer="windsekirun@gmail.com"
 
-ENV ANDROID_SDK_ZIP commandlinetools-linux-6609375_latest.zip
+ENV ANDROID_SDK_ZIP commandlinetools-linux-7583922_latest.zip
 ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/$ANDROID_SDK_ZIP
 ENV ANDROID_HOME /opt/android-sdk-linux
 ENV ANDROID_SDK_ROOT /opt/android-sdk-linux
 
-ENV GRADLE_ZIP gradle-5.6.4-bin.zip
+ENV GRADLE_ZIP gradle-6.5-bin.zip
 ENV GRADLE_ZIP_URL https://services.gradle.org/distributions/$GRADLE_ZIP
 
 ENV PATH $PATH:$ANDROID_SDK_ROOT/tools/bin
 ENV PATH $PATH:$ANDROID_SDK_ROOT/platform-tools
-ENV PATH $PATH:/opt/gradle-5.6.4/bin
+ENV PATH $PATH:/opt/gradle-6.5-bin/bin
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -33,7 +33,7 @@ USER root
 
 ## Install requirements
 RUN dpkg --add-architecture i386
-RUN rm -rf /var/lib/apt/list/* && apt-get update && apt-get install ca-certificates curl gnupg2 software-properties-common git unzip file apt-utils lxc apt-transport-https libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 -y
+RUN rm -rf /var/lib/apt/list/* && apt-get update && apt-get install ca-certificates curl gnupg2 software-properties-common git unzip file apt-utils lxc apt-transport-https lib32gcc1:i386 libc6:i386 libncurses5:i386 lib32ncurses6:i386 libstdc++6:i386 zlib1g:i386 -y
 
 ## Install Docker-ce into Image
 RUN curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey;
@@ -66,6 +66,6 @@ RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ## Install Jenkins plugin	
-USER jenkins
+#USER jenkins
 
-RUN /usr/local/bin/install-plugins.sh git gradle android-emulator ws-cleanup slack embeddable-build-status blueocean github-coverage-reporter jacoco github-pr-coverage-status locale
+#RUN /usr/local/bin/install-plugins.sh git gradle android-emulator ws-cleanup slack embeddable-build-status blueocean github-coverage-reporter jacoco github-pr-coverage-status locale
